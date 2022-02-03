@@ -4,9 +4,11 @@ import TextInput from "../../../component/textInput/TextInput";
 import "./lobby.css"
 import IPartita from "../../../interfaces/IPartita";
 import {Difficolta} from "../../../interfaces/IConfigurazione";
+import {PlayerType} from "../../../interfaces/PlayerType";
+
 
 interface Props {
-    setGiocatore: (nick: string, isImprenditore: boolean) => void,
+    setGiocatore: (nick: string, isImprenditore: PlayerType) => void,
     idPartita: string
 }
 
@@ -35,14 +37,13 @@ export default class Lobby extends React.Component<Props, State> {
         )
     }
 
-    handleSend = () => this.props.setGiocatore(this.state.nickname, this.state.isImprenditore)
+    handleSend = () => this.props.setGiocatore(this.state.nickname, this.state.isImprenditore ? PlayerType.ENTERPRENEUR : PlayerType.STANDARD)
 
     handleSetNickname = (text: string) => this.setState({nickname: text})
     handleSetImprenditore = (evt: ChangeEvent<HTMLInputElement>) => this.setState({isImprenditore: evt.target.checked})
 
 
     render() {
-
         if(this.state.partita === undefined)
             return null;
 
@@ -57,8 +58,7 @@ export default class Lobby extends React.Component<Props, State> {
                             type="checkbox"
                             value="Imprenditore"
                             checked={this.state.isImprenditore}
-                            onChange={this.handleSetImprenditore}
-                        />
+                            onChange={this.handleSetImprenditore}/>
 
                         Imprenditore
                     </label>

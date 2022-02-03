@@ -30,7 +30,7 @@ export default class AccediPartita extends React.Component<Props, State> {
         StompController.getPartite().then(partite => {
             this.setState({
                 loading: false,
-                partite: partite
+                partite: partite,
             })
         })
     }
@@ -42,8 +42,7 @@ export default class AccediPartita extends React.Component<Props, State> {
 
         const { partite } = this.state
 
-        return <div className={"container_accedi"}>
-            {
+        return <div className={"container_accedi"}>{
                 partite.map(partita =>
                     <React.Fragment key={partita.id}>
                     <Link to={"/partita/" + partita.id}>
@@ -52,10 +51,7 @@ export default class AccediPartita extends React.Component<Props, State> {
                         </div>
                     </Link>
                     <hr/>
-                    </React.Fragment>
-
-                )
-            }
+                    </React.Fragment>)}
         </div>
     }
 }

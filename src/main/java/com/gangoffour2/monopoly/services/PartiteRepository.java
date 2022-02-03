@@ -1,5 +1,7 @@
 package com.gangoffour2.monopoly.services;
 
+import com.gangoffour2.monopoly.eccezioni.GameNotFoundException;
+import com.gangoffour2.monopoly.eccezioni.PlayerNotFoundException;
 import com.gangoffour2.monopoly.model.giocatore.Giocatore;
 import com.gangoffour2.monopoly.model.IPartita;
 
@@ -29,16 +31,24 @@ public class PartiteRepository {
         giocatori.remove(idSessione);
     }
 
-    public synchronized Giocatore getGiocatoreByIdSessione(String idSessione) {
-        return giocatori.get(idSessione);
+    public synchronized Giocatore getGiocatoreByIdSessione(String idSessione) throws PlayerNotFoundException {
+        Giocatore player = giocatori.get(idSessione);
+        if (player == null){
+            throw new PlayerNotFoundException("No player matches the session id", idSessione);
+        }
+        return player;
     }
 
     public synchronized void registraGiocatore(String idSessione, Giocatore giocatore) {
         giocatori.put(idSessione, giocatore);
     }
 
-    public synchronized IPartita getPartitaById(String id) {
-        return partite.get(id);
+    public synchronized IPartita getPartitaById(String id) throws GameNotFoundException {
+        IPartita game = partite.get(id);
+        if (game == null){
+            throw new GameNotFoundException("Game not found", id);
+        }
+        return game;
     }
 
     public synchronized void addPartita(IPartita partita) {
@@ -51,5 +61,9 @@ public class PartiteRepository {
 
     public synchronized void rimuoviPartitaById(String id) {
         partite.remove(id);
+    }
+
+    public synchronized boolean gameExists(String gameId){
+        return partite.containsKey(gameId);
     }
 }

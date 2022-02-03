@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.gangoffour2.monopoly.azioni.casella.*;
 import com.gangoffour2.monopoly.azioni.giocatore.*;
+import com.gangoffour2.monopoly.eccezioni.GiocatoreEsistenteException;
 import com.gangoffour2.monopoly.model.IPartita;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
@@ -181,7 +182,7 @@ public abstract class StatoPartita implements Serializable {
 
     }
 
-    public void onAzioneGiocatore(EntraInPartita entraInPartita) {
+    public void onAzioneGiocatore(EntraInPartita entraInPartita){
 
     }
 

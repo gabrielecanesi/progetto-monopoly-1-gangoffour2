@@ -42,10 +42,10 @@ public class Partita extends IPartita implements PartitaObserver {
 
     public synchronized void aggiungiGiocatore(Giocatore g) throws PartitaPienaException, GiocatoreEsistenteException {
         if (giocatori.size() == config.getNumeroGiocatori()) {
-            throw new PartitaPienaException();
+            throw new PartitaPienaException("Partita piena");
         }
         if (giocatori.contains(g)) {
-            throw new GiocatoreEsistenteException();
+            throw new GiocatoreEsistenteException("Already existing user");
         }
         g.setCasellaCorrente(tabellone.getCasella(0));
         g.setConto(config.getSoldiIniziali());

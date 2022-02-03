@@ -1,4 +1,4 @@
-import {CompatClient, Stomp} from "@stomp/stompjs";
+import {CompatClient, IMessage, Stomp} from "@stomp/stompjs";
 import websocket from "websocket"
 import IPartita from "../interfaces/IPartita";
 import IConfigurazione from "../interfaces/IConfigurazione";
@@ -7,6 +7,7 @@ import ICasellaProprieta from "../interfaces/caselle/ICasellaProprieta";
 import {ICarta} from "../interfaces/ICarta";
 import ICasellaTerreno from "../interfaces/caselle/ICasellaTererno";
 import ICasella from "../interfaces/caselle/ICasella";
+import {PlayerType} from "../interfaces/PlayerType";
 
 Object.assign(global, {WebSocket: websocket.w3cwebsocket})
 
@@ -54,24 +55,23 @@ export default class StompController {
             })
     }
 
-    static accediPartita(idPartita: string, nickname: string, isImprenditore: boolean) {
+    static accediPartita(idPartita: string, nickname: string, isImprenditore: PlayerType) {
         const client = Stomp.client(WS_URL + "/stomp");
         this.client = client;
         this.idPartita = idPartita;
         client.connect({}, () => {
+
             client.subscribe("/topic/partite/" + idPartita, (res) =>
                 ObserverSingleton.notify(JSON.parse(res.body) as IPartita)
-            )
-            console.log("qui", isImprenditore);
+            );
+
             client.send("/app/partite/" + idPartita + "/entra", {},
-                JSON.stringify({nickname: nickname, isImprenditore: isImprenditore})
-            )
-        })
+                JSON.stringify({nickname: nickname, isImprenditore: isImprenditore}));
+        });
     }
 
     static subscribeCarte() {
         this.client.subscribe("/topic/partite/" + this.idPartita + "/carta", (res) => {
-                console.log(res.body)
                 ObserverSingleton.notifyCarta(JSON.parse(res.body) as ICarta)
             }
         )

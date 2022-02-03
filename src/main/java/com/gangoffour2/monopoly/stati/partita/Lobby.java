@@ -16,11 +16,8 @@ public class Lobby extends StatoPartita {
     public void onAzioneGiocatore(EntraInPartita entraInPartita) {
         partita.fermaAttesa();
         // Aggiorna i client e poi si rimette in attesa se non è stato raggiunto il numero
-        try {
-            partita.aggiungiGiocatore(entraInPartita.getGiocatore());
-        } catch (GiocatoreEsistenteException e) {
-            // Lancia un messaggio di errore
-        }
+        partita.aggiungiGiocatore(entraInPartita.getGiocatore());
+
         if (partita.getGiocatori().size() == partita.getConfig().getNumeroGiocatori()) {
             partita.inizioPartita();
         }

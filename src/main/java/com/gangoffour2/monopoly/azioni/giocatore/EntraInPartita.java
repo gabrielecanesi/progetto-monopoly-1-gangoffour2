@@ -1,5 +1,6 @@
 package com.gangoffour2.monopoly.azioni.giocatore;
 
+import com.gangoffour2.monopoly.eccezioni.GiocatoreEsistenteException;
 import com.gangoffour2.monopoly.stati.casella.StatoCasella;
 import com.gangoffour2.monopoly.stati.partita.StatoPartita;
 import lombok.Data;
@@ -15,7 +16,7 @@ public class EntraInPartita extends AzioneGiocatore {
     }
 
     @Override
-    public void accept(StatoPartita statoPartita) {
+    public void accept(StatoPartita statoPartita){
         statoPartita.onAzioneGiocatore(this);
     }
 }

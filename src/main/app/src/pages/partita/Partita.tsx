@@ -6,11 +6,12 @@ import StompController from "../../application/stompController";
 import CasellaSingleton from "../../component/caselle/CasellaSingleton";
 import BarraAzioni from "../../component/barraAzioni/barraAzioni";
 import style from "./partita.module.css"
+import {PlayerType} from "../../interfaces/PlayerType";
 
 interface Props {
     idPartita: string,
     nickname: string,
-    isImprenditore: boolean
+    isImprenditore:PlayerType
 }
 
 interface State {

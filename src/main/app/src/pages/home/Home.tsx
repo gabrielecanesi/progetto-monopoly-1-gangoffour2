@@ -36,7 +36,7 @@ export default class Home extends React.Component<Props, State> {
                <h1>Monopoly</h1>
                 <div className={"menu_selector"}>
                     {lista.map(( el, i ) =>
-                        <div key={el.text} aria-selected = {this.state.selected === i ? true : false} onClick={() => this.handle_change_select(i)}>
+                        <div key={el.text} aria-selected = {this.state.selected === i} onClick={() => this.handle_change_select(i)}>
                             <p>{ el.text }</p>
                         </div>
                     )}

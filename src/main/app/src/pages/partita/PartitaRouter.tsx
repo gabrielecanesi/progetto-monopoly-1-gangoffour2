@@ -1,6 +1,7 @@
 import React from "react";
 import Lobby from "./lobby/Lobby";
 import Partita from "./Partita";
+import {PlayerType} from "../../interfaces/PlayerType";
 
 
 interface Props {
@@ -9,7 +10,7 @@ interface Props {
 
 interface State {
     nickname?: string,
-    isImprenditore: boolean
+    isImprenditore: PlayerType
 }
 
 export default class PartitaRouter extends React.Component<Props, State> {
@@ -23,11 +24,11 @@ export default class PartitaRouter extends React.Component<Props, State> {
 
         this.state = {
             nickname: undefined,
-            isImprenditore: false
+            isImprenditore: PlayerType.STANDARD
         }
     }
 
-    handle_set_giocatore = (nick: string, isImprenditore: boolean) => {
+    handle_set_giocatore = (nick: string, isImprenditore: PlayerType) => {
         this.setState({nickname: nick, isImprenditore})
     }
 
