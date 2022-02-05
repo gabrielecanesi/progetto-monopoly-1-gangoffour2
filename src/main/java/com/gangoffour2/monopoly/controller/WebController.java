@@ -16,7 +16,7 @@ public class WebController {
     public String creaPartita(@RequestBody Configurazione configurazione) throws IOException {
         IPartita nuovaPartita = FactoryPartita.getInstance().creaPartita(configurazione);
         PartiteRepository.getInstance().addPartita(nuovaPartita);
-        nuovaPartita.inizializza();
+        nuovaPartita.attendiAzione();
         return nuovaPartita.getId();
     }
 

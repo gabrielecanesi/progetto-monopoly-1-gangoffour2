@@ -18,20 +18,20 @@ public class LancioDadi extends StatoPartita {
     @Override
     public void onTimeout() {
         partita.fermaAttesa();
-        partita.continua(this);
+        partita.continueFrom(this);
     }
 
     @Override
     public void riprendi(AttesaFallimento attesaFallimento) {
         Giocatore giocatore = partita.getTurnoCorrente().getGiocatore();
         giocatore.aggiungiDenaro(-attesaFallimento.getSoldiDaPagare());
-        partita.continua(this);
+        partita.continueFrom(this);
     }
 
     @Override
     public void onAzioneGiocatore(LanciaDadi lanciaDadi) {
         partita.fermaAttesa();
-        partita.continua(this);
+        partita.continueFrom(this);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class LancioDadi extends StatoPartita {
     @Override
     public void onAzioneCasella(PagaAffitto pagaAffitto) {
         if(pagaAffitto.getProprieta().getProprietario().equals(partita.getTurnoCorrente().getGiocatore())) {
-            partita.continua(this);
+            partita.continueFrom(this);
         } else {
             partita.setStato(AttesaAffitto.builder()
                     .proprieta(pagaAffitto.getProprieta())
@@ -70,7 +70,7 @@ public class LancioDadi extends StatoPartita {
         if (giocatore.haCartaEsciGratis()) {
             partita.getMazzo().utilizzaCarta(giocatore);
             partita.setStato(LancioDadi.builder().build());
-            partita.continua(this);
+            partita.continueFrom(this);
         }
         else {
             partita.getTabellone().muoviAProssimaCasellaSemplice(giocatore, casella -> casella.getTipo().equals("Prigione"));
@@ -81,12 +81,12 @@ public class LancioDadi extends StatoPartita {
 
     @Override
     public void onAzioneCasella(PescaImprevisto pescaImpervisto) {
-        partita.broadcast(partita.getMazzo().nextImprevisto(), "carta");
+        partita.broadcast("carta", partita.getMazzo().nextImprevisto());
         try {
             partita.getMazzo().pescaImprevisto(partita.getTurnoCorrente().getGiocatore());
             // La partita continua solo se il suo stato non è stato modificato dall'effetto della carta
             if(partita.getStato() == this)
-                partita.continua(this);
+                partita.continueFrom(this);
         }catch (ModificaDenaroException e){
             fallimentoCarta(e.getSoldiDaPagare());
         }
@@ -94,12 +94,12 @@ public class LancioDadi extends StatoPartita {
 
     @Override
     public void onAzioneCasella(PescaProbabilita pescaProbabilita) {
-        partita.broadcast(partita.getMazzo().nextProbabilita(), "carta");
+        partita.broadcast("carta", partita.getMazzo().nextProbabilita());
         try {
             partita.getMazzo().pescaProbabilita(partita.getTurnoCorrente().getGiocatore());
             // La partita continua solo se il suo stato non è stato modificato dall'effetto della carta
             if(partita.getStato() == this)
-                partita.continua(this);
+                partita.continueFrom(this);
         }catch (ModificaDenaroException e){
             fallimentoCarta(e.getSoldiDaPagare());
         }
@@ -118,7 +118,7 @@ public class LancioDadi extends StatoPartita {
     public void onAzioneCasella(AggiungiDenaro aggiungiDenaro) {
         try {
             partita.getTurnoCorrente().getGiocatore().aggiungiDenaro(aggiungiDenaro.getImporto());
-            partita.continua(this);
+            partita.continueFrom(this);
         }catch (Exception e){
             int soldiDaPagare = aggiungiDenaro.getImporto();
             partita.memorizzaStato(this);

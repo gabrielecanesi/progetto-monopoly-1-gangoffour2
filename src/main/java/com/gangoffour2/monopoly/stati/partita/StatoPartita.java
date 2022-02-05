@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.gangoffour2.monopoly.azioni.casella.*;
 import com.gangoffour2.monopoly.azioni.giocatore.*;
-import com.gangoffour2.monopoly.eccezioni.GiocatoreEsistenteException;
 import com.gangoffour2.monopoly.model.IPartita;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
@@ -72,7 +71,7 @@ public abstract class StatoPartita implements Serializable {
      * @param passaggioVuoto Usato per fare overloading tramite polimorfismo
      */
     public void onAzioneCasella(PassaggioVuoto passaggioVuoto) {
-        partita.continua(this);
+        partita.continueFrom(this);
     }
 
     public void onAzioneCasella(PagaAffitto pagaAffitto) {
@@ -113,39 +112,39 @@ public abstract class StatoPartita implements Serializable {
      * la partita in modo coerente.
      */
     public void riprendi(AttesaAcquisto acquistaProprieta){
-        partita.continua(acquistaProprieta);
+        partita.continueFrom(acquistaProprieta);
     }
 
     public void riprendi(AttesaAffitto attesaAffitto){
-        partita.continua(attesaAffitto);
+        partita.continueFrom(attesaAffitto);
     }
 
     public void riprendi(AttesaFallimento attesaFallimento){
-        partita.continua(attesaFallimento);
+        partita.continueFrom(attesaFallimento);
     }
 
     public void riprendi(AttesaPrigione attesaPrigione){
-        partita.continua(attesaPrigione);
+        partita.continueFrom(attesaPrigione);
     }
 
     public void riprendi(FineTurno fineTurno){
-        partita.continua(fineTurno);
+        partita.continueFrom(fineTurno);
     }
 
     public void riprendi(StatoAsta statoAsta){
-        partita.continua(statoAsta);
+        partita.continueFrom(statoAsta);
     }
 
     public void riprendi(InizioTurno inizioTurno){
-        partita.continua(inizioTurno);
+        partita.continueFrom(inizioTurno);
     }
 
     public void riprendi(LancioDadi lancioDadi) {
-        partita.continua(lancioDadi);
+        partita.continueFrom(lancioDadi);
     }
 
     public void riprendi(Lobby lobby){
-        partita.continua(lobby);
+        partita.continueFrom(lobby);
     }
 
     public abstract void acceptRiprendi(StatoPartita statoPartita);

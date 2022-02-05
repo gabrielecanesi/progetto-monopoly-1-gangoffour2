@@ -29,7 +29,7 @@ public class AttesaPrigione extends StatoPartita {
             partita.setTurnoCorrente(Turno.builder()
                     .giocatore(partita.getTurnoCorrente().getGiocatore())
                     .build());
-            partita.continua(this);
+            partita.continueFrom(this);
         }
         else {
             partita.cambiaTurno();
@@ -41,7 +41,7 @@ public class AttesaPrigione extends StatoPartita {
         try {
             paga.getGiocatore().getCasellaCorrente().onAzioneGiocatore(paga);
             partita.fermaAttesa();
-            partita.continua(this);
+            partita.continueFrom(this);
         }catch (ModificaDenaroException ignored){
             partita.cambiaTurno();
         }

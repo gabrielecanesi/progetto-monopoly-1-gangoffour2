@@ -13,7 +13,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class EventiControllerConfig implements WebSocketMessageBrokerConfigurer {
-
+    public static final String BROKER_PREFIX = "/topic/partite/";
     @Autowired
     private Environment env;
 

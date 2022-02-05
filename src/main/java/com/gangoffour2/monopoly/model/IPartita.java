@@ -19,7 +19,7 @@ import java.util.ArrayList;
 @Data
 @SuperBuilder
 @NoArgsConstructor
-public abstract class IPartita implements Serializable {
+public abstract class IPartita implements Serializable, PartitaObserver {
     protected String id;
 
     @Builder.Default
@@ -48,12 +48,6 @@ public abstract class IPartita implements Serializable {
 
     public abstract void cambiaTurno();
 
-    public abstract void fineGiro();
-
-    public abstract void broadcast();
-
-    public abstract <T> void broadcast(T obj, String name);
-
     public abstract void onAzioneCasella(AzioneCasella azione);
 
     public abstract void onAzioneGiocatore(AzioneGiocatore azione);
@@ -64,13 +58,11 @@ public abstract class IPartita implements Serializable {
 
     public abstract Giocatore getGiocatoreByNick(String nick);
 
-    public abstract void inizializza();
-
     public abstract void fermaAttesa();
 
     public abstract void attendiAzione();
 
-    public abstract void continua(StatoPartita statoPartita);
+    public abstract void continueFrom(StatoPartita statoPartita);
 
     public abstract void memorizzaStato(StatoPartita statoPartita);
 

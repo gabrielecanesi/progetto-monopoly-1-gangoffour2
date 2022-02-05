@@ -30,7 +30,7 @@ public class StatoAsta extends StatoPartita {
                     .asta(astaCorrente)
                     .build());
         }
-        partita.continua(this);
+        partita.continueFrom(this);
     }
 
     @Override

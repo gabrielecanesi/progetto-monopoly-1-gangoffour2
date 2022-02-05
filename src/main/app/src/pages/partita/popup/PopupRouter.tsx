@@ -24,7 +24,7 @@ export default class PopupRouter extends React.Component<Props, State> implement
         }
     }
 
-    udpateCarta(carta: ICarta): void {
+    onCardExtraction(carta: ICarta): void {
         this.setState({carta: carta})
         setTimeout(() => {
             this.setState({carta: undefined})
@@ -41,7 +41,6 @@ export default class PopupRouter extends React.Component<Props, State> implement
     }
 
     render() {
-        console.log(this.state.carta)
         return <div>
             <PopupCarta carta={this.state.carta}/>
             <PopupRouterAzioni partita={this.props.partita} nickname={this.props.nickname}/>

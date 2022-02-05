@@ -4,12 +4,8 @@ package com.gangoffour2.monopoly.controller;
 import com.gangoffour2.monopoly.model.IPartita;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.messaging.MessageHeaders;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.stomp.StompCommand;
-import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+
 
 @Data
 @Builder
@@ -26,11 +22,11 @@ public class MessageBrokerSingleton {
     }
 
     public synchronized void broadcast(IPartita partita) {
-        template.convertAndSend("/topic/partite/" + partita.getId(), partita);
+        template.convertAndSend(EventiControllerConfig.BROKER_PREFIX + partita.getId(), partita);
     }
 
 
-    public <T> void broadcast(String idPartita, String name,T oggetto){
-        template.convertAndSend("/topic/partite/" + idPartita + "/" + name, oggetto);
+    public <T> void broadcast(String gameId, String topic, T oggetto){
+        template.convertAndSend(EventiControllerConfig.BROKER_PREFIX + gameId + "/" + topic, oggetto);
     }
 }

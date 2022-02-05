@@ -51,6 +51,7 @@ public class Partita extends IPartita implements PartitaObserver {
         g.setConto(config.getSoldiIniziali());
         giocatori.add(g);
         g.setPartita(this);
+        broadcast("game", this);
     }
 
     public synchronized void rimuoviGiocatore(Giocatore g) {
@@ -75,42 +76,33 @@ public class Partita extends IPartita implements PartitaObserver {
 
         turnoCorrente.inizializzaDadi(config.getNumeroDadi());
         turnoCorrente.getGiocatore().getCasellaCorrente().inizioTurno(turnoCorrente.getGiocatore());
-        broadcast();
+        broadcast("newTurn", turnoCorrente);
     }
 
-    public void fineGiro() {
-        //Eventi per fine giro (Economia random o altro)
-    }
-
-    public void broadcast() {
-        MessageBrokerSingleton.getInstance().broadcast(this);
-    }
-
-    public <T> void broadcast(T obj, String nome){
-        MessageBrokerSingleton.getInstance().broadcast(id, nome, obj);
+    @Override
+    public <T> void broadcast(String topic, T object){
+        MessageBrokerSingleton.getInstance().broadcast(id, topic, object);
     }
 
     @Override
     public synchronized void onAzioneCasella(AzioneCasella azione) {
         azione.accept(stato);
-        broadcast();
     }
 
     @Override
     public synchronized void onAzioneGiocatore(AzioneGiocatore azione) {
         azione.accept(stato);
-        broadcast();
     }
 
     public synchronized void setStato(StatoPartita nuovoStato) {
         stato = nuovoStato;
         stato.setPartita(this);
-        broadcast();
+        broadcast("newState", nuovoStato);
     }
 
-    private void sleep(int millisecondi){
+    private void sleep(){
         try {
-            Thread.sleep(millisecondi);
+            Thread.sleep(200);
         } catch (InterruptedException e) {
             Logger logger = LoggerFactory.getLogger(Partita.class);
             logger.error("Wait fallita");
@@ -119,8 +111,7 @@ public class Partita extends IPartita implements PartitaObserver {
     }
 
     public void continuaTurno() {
-        broadcast();
-        sleep(200);
+        sleep();
 
         if (turnoCorrente.inVisita()){
             turnoCorrente.prossimoEffetto(tabellone);
@@ -130,7 +121,7 @@ public class Partita extends IPartita implements PartitaObserver {
             if (turnoCorrente.limitePrigione()){
                 Giocatore giocatore = turnoCorrente.getGiocatore();
                 tabellone.muoviAProssimaCasellaSemplice(giocatore, casella -> casella.getNome().equals("Prigione"));
-                turnoCorrente.getGiocatore().getCasellaCorrente().onAzioneGiocatore(VaiInPrigioneAzione
+                giocatore.getCasellaCorrente().onAzioneGiocatore(VaiInPrigioneAzione
                         .builder()
                         .giocatore(giocatore)
                         .build());
@@ -173,7 +164,7 @@ public class Partita extends IPartita implements PartitaObserver {
     }
 
     @Override
-    public void continua(StatoPartita statoPartita){
+    public void continueFrom(StatoPartita statoPartita){
         if (stackStati.isEmpty()){
             setStato(LancioDadi.builder().build());
             turnoCorrente.inizializzaDadi(config.getNumeroDadi());

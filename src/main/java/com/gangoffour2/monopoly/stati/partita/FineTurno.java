@@ -42,14 +42,14 @@ public class FineTurno extends StatoPartita {
     public void onAzioneGiocatore(Ipoteca ipoteca) {
         Optional<Proprieta> qry = findProprieta(ipoteca.getGiocatore(), ipoteca.getProprieta());
         qry.ifPresent(proprieta -> proprieta.onAzioneGiocatore(ipoteca));
-        partita.continua(this);
+        partita.continueFrom(this);
     }
 
     @Override
     public void onAzioneGiocatore(UpgradaTerreno upgradeTerreno){
         Optional<Proprieta> qry = findProprieta(upgradeTerreno.getGiocatore(), upgradeTerreno.getTerreno());
         qry.ifPresent(proprieta -> proprieta.onAzioneGiocatore(upgradeTerreno));
-        partita.continua(this);
+        partita.continueFrom(this);
     }
 
 
@@ -57,7 +57,7 @@ public class FineTurno extends StatoPartita {
     public void onAzioneGiocatore(DowngradaTerreno downgradeTerreno){
         Optional<Proprieta> qry = findProprieta(downgradeTerreno.getGiocatore(), downgradeTerreno.getTerreno());
         qry.ifPresent(proprieta -> proprieta.onAzioneGiocatore(downgradeTerreno));
-        partita.continua(this);
+        partita.continueFrom(this);
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.gangoffour2.monopoly.model.casella.Casella;
 import com.gangoffour2.monopoly.model.casella.strategy.ProprietaCaselleStrategy;
 import com.gangoffour2.monopoly.model.casella.strategy.StrategiaCasellaVanilla;
 import com.gangoffour2.monopoly.model.giocatore.Giocatore;
+import com.gangoffour2.monopoly.model.giocatore.PlayerPosition;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,7 +33,12 @@ public class Tabellone implements ITabellone, Serializable {
 
     @Override
     public void muoviGiocatore(Giocatore giocatore, int quantita) {
-        giocatore.setCasellaCorrente(caselle.get((caselle.indexOf(giocatore.getCasellaCorrente()) + quantita) % caselle.size()));
+        int currentPosition = caselle.indexOf(giocatore.getCasellaCorrente());
+        giocatore.setCasellaCorrente(caselle.get((currentPosition + quantita) % caselle.size()));
+        partita.broadcast("position", PlayerPosition.builder()
+                .player(giocatore)
+                .position((currentPosition + quantita) % caselle.size())
+                .build());
     }
 
     @Override

@@ -41,7 +41,7 @@ public class AttesaAcquisto extends StatoPartita {
 
     @Override
     public void riprendi(StatoAsta statoPartita){
-        partita.continua(this);
+        partita.continueFrom(this);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class AttesaAcquisto extends StatoPartita {
         giocatore.getCasellaCorrente().onAzioneGiocatore(
                 AcquistaProprieta.builder().giocatore(giocatore).build()
         );
-        partita.continua(this);
+        partita.continueFrom(this);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class AttesaAcquisto extends StatoPartita {
         try {
             acquistaProprieta.getGiocatore().getCasellaCorrente().onAzioneGiocatore(acquistaProprieta);
             partita.fermaAttesa();
-            partita.continua(this);
+            partita.continueFrom(this);
         }catch (ModificaDenaroException e){
             partita.memorizzaStato(this);
             partita.setStato(StatoAsta.builder()
