@@ -1,4 +1,9 @@
-import {ObserverPartita, ObserverSingleton} from "../../application/ObserverSingleton";
+import {
+    NewStateObserver,
+    ObserverPartita,
+    ObserverSingleton,
+    PlayerPositionObserver
+} from "../../application/ObserverSingleton";
 import React from "react";
 import IPartita from "../../interfaces/IPartita";
 import Tabellone from "../../component/Tabellone";
@@ -7,18 +12,20 @@ import CasellaSingleton from "../../component/caselle/CasellaSingleton";
 import BarraAzioni from "../../component/barraAzioni/barraAzioni";
 import style from "./partita.module.css"
 import {PlayerType} from "../../interfaces/PlayerType";
+import PlayerPosition from "../../interfaces/PlayerPosition";
+import IStatoPartita from "../../interfaces/stati/partita/IStatoPartita";
 
 interface Props {
     idPartita: string,
     nickname: string,
-    isImprenditore:PlayerType
+    isImprenditore: PlayerType
 }
 
 interface State {
     partita?: IPartita
 }
 
-export default class Partita extends React.Component<Props, State> implements ObserverPartita {
+export default class Partita extends React.Component<Props, State> implements ObserverPartita, NewStateObserver {
 
     constructor(props: Props) {
         super(props);
@@ -29,6 +36,7 @@ export default class Partita extends React.Component<Props, State> implements Ob
 
     componentDidMount() {
         ObserverSingleton.addListener(this);
+        ObserverSingleton.addNewStateListener(this);
         StompController.accediPartita(this.props.idPartita, this.props.nickname, this.props.isImprenditore);
     }
 
@@ -36,7 +44,17 @@ export default class Partita extends React.Component<Props, State> implements Ob
         ObserverSingleton.removeListener(this);
     }
 
-    update(partita: IPartita) {
+    onNewState(state: IStatoPartita) {
+        let newPartita: IPartita | undefined = this.state.partita;
+        if (newPartita !== undefined){
+            newPartita.stato = state;
+            this.setState({
+               partita: newPartita
+            });
+        }
+    }
+
+    gameUpdate(partita: IPartita) {
         this.setState({
             partita: partita
         })
@@ -46,7 +64,6 @@ export default class Partita extends React.Component<Props, State> implements Ob
         if(!this.state.partita)
             return null;
 
-        CasellaSingleton.casellaGiocatore = {}
         this.state.partita.giocatori.forEach(el => {
             CasellaSingleton.addGiocatore(el.nick, el.casellaCorrente)
         })

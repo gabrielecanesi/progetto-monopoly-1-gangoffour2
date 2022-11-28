@@ -180,7 +180,7 @@ class TestProprieta {
         g.setConto(1000);
         Proprieta casella = (Proprieta) partita.getTabellone().getCasella(1);
         partita.onAzioneGiocatore(Ipoteca.builder().giocatore(g).proprieta(casella).build());
-        partita.continua(partita.getStato());
+        partita.continueFrom(partita.getStato());
 
         assertInstanceOf(FineTurno.class, partita.getStato());
         assertEquals(1000 + 30 - 200, g.getConto());

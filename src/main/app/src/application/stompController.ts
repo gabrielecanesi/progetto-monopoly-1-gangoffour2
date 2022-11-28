@@ -8,6 +8,9 @@ import {ICarta} from "../interfaces/ICarta";
 import ICasellaTerreno from "../interfaces/caselle/ICasellaTererno";
 import ICasella from "../interfaces/caselle/ICasella";
 import {PlayerType} from "../interfaces/PlayerType";
+import PlayerPosition from "../interfaces/PlayerPosition";
+import PlayerAction from "../interfaces/PlayerAction";
+import IStatoPartita from "../interfaces/stati/partita/IStatoPartita";
 
 Object.assign(global, {WebSocket: websocket.w3cwebsocket})
 
@@ -61,9 +64,25 @@ export default class StompController {
         this.idPartita = idPartita;
         client.connect({}, () => {
 
-            client.subscribe("/topic/partite/" + idPartita, (res) =>
-                ObserverSingleton.notify(JSON.parse(res.body) as IPartita)
-            );
+            client.subscribe("/topic/partite/" + idPartita + "/position", (res) => {
+                console.log(JSON.parse(res.body));
+                ObserverSingleton.onPlayerPosition(JSON.parse(res.body) as PlayerPosition);
+            });
+
+            client.subscribe("/topic/partite/" + idPartita + "/playerAction", (message) => {
+                ObserverSingleton.onPlayerAction(JSON.parse(message.body) as PlayerAction);
+                console.log(JSON.parse(message.body));
+            });
+
+            client.subscribe("/topic/partite/" + idPartita + "/newState", (message: IMessage) => {
+                console.log(JSON.parse(message.body));
+                ObserverSingleton.onNewState(JSON.parse(message.body) as IStatoPartita);
+            })
+
+            client.subscribe("/topic/partite/" + idPartita + "/game", (res) => {
+                console.log(JSON.parse(res.body));
+                ObserverSingleton.notify(JSON.parse(res.body) as IPartita);
+            });
 
             client.send("/app/partite/" + idPartita + "/entra", {},
                 JSON.stringify({nickname: nickname, isImprenditore: isImprenditore}));
@@ -72,7 +91,7 @@ export default class StompController {
 
     static subscribeCarte() {
         this.client.subscribe("/topic/partite/" + this.idPartita + "/carta", (res) => {
-                ObserverSingleton.notifyCarta(JSON.parse(res.body) as ICarta)
+                ObserverSingleton.onCardExtract(JSON.parse(res.body) as ICarta)
             }
         )
     }

@@ -1,8 +1,9 @@
 import React from 'react';
 import ICasellaPrigione from "../../interfaces/caselle/CasellaPrigione";
+import ICasellaVia from "../../interfaces/caselle/ICasellaVia";
 
 interface Props {
-    casella: ICasellaPrigione
+    casella:ICasellaVia
 }
 
 interface State {

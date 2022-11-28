@@ -37,7 +37,7 @@ const Proprieta: FunctionComponent<ICasellaProprieta> = (proprieta) => {
                         }
                     </div>
                 </div>
-                <button onClick={() => set_open(!open)}><i className="fas fa-chevron-down"></i></button>
+                <button onClick={() => set_open(!open)}><i className="fas fa-chevron-down"/></button>
             </div>
             <div className={"open_close_property"} aria-selected={open}>
                 {element.render()
