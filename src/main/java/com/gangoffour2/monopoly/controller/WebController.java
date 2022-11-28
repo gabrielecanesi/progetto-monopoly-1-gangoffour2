@@ -1,28 +1,31 @@
 package com.gangoffour2.monopoly.controller;
 
-import com.gangoffour2.monopoly.model.Configurazione;
-import com.gangoffour2.monopoly.model.IPartita;
-import com.gangoffour2.monopoly.services.FactoryPartita;
-import com.gangoffour2.monopoly.services.PartiteRepository;
+import com.gangoffour2.monopoly.Config;
+import com.gangoffour2.monopoly.Game;
+import com.gangoffour2.monopoly.service.WebService;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
 
 @RestController
+@RequestMapping("/games")
 public class WebController {
 
-    @PostMapping(value = "/partite")
-    public String creaPartita(@RequestBody Configurazione configurazione) throws IOException {
-        IPartita nuovaPartita = FactoryPartita.getInstance().creaPartita(configurazione);
-        PartiteRepository.getInstance().addPartita(nuovaPartita);
-        nuovaPartita.inizializza();
-        return nuovaPartita.getId();
+    @Setter(onMethod=@__({@Autowired}))
+    private WebService service;
+
+    @PostMapping
+    public String createGame(@RequestBody Config config) throws IOException {
+        return service.createGame(config);
     }
 
-    @GetMapping("/partite")
-    public List<IPartita> getPartiteAperte() {
-        return PartiteRepository.getInstance().getPartiteAperte();
+    @GetMapping
+    public List<Game> getGames(){
+        return service.getGames();
     }
-
 }
+
+

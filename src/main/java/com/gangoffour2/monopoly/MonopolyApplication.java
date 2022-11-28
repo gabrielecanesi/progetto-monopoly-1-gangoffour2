@@ -9,4 +9,5 @@ public class MonopolyApplication {
     public static void main(String[] args) {
         SpringApplication.run(MonopolyApplication.class, args);
     }
+
 }
