@@ -46,6 +46,10 @@ public class GameImpl extends Game {
         turn = (turn + 1) % players.size();
     }
 
+    private Player currentPlayer(){
+        return getPlayers().get(turn);
+    }
+
     private void gameLoop() throws InterruptedException, SquareNotFoundException {
 
         while(!endGame()){
@@ -55,13 +59,13 @@ public class GameImpl extends Game {
 
             for (int i = 1; i <= sum; ++i){
                 GameCommand action = i < sum ?
-                        board.intermediateStep(players.get(turn)) :
-                        board.finalStep(players.get(turn));
+                        board.intermediateStep(currentPlayer()) :
+                        board.finalStep(currentPlayer());
 
                 Thread.sleep(200);
-                Square square = board.getSquareByPosition(players.get(turn).getPosition());
-                messageManager.broadcastNewSquare(players.get(turn), square);
-                messageManager.sendPrivate(players.get(turn), "Message to " + players.get(turn).getUsername());
+                Square square = board.getSquareByPosition(currentPlayer().getPosition());
+                messageManager.broadcastNewSquare(currentPlayer(), square);
+                messageManager.sendPrivate(currentPlayer(), "Message to " + currentPlayer().getUsername());
 
                 commands.push(action);
                 consumeCommandsStack();

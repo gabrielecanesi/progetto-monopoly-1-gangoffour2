@@ -24,13 +24,14 @@ public class PropertyBuyRequestCommand extends GameCommand {
         wait(15000);
         if (state == State.STOPPED){
             System.out.println("Stopped and bought");
+            player.setAmount(player.getAmount() - property.getBaseCost());
             System.out.println("Amount: " + player.getAmount());
         }
         else {
             System.out.println("Ripped");
+            game.getCommands().push(new Auction(game, property));
         }
 
-        game.getCommands().push(new Auction(game, property));
     }
 
     @Override
@@ -39,7 +40,6 @@ public class PropertyBuyRequestCommand extends GameCommand {
             return;
         }
         state = State.STOPPED;
-        player.setAmount(player.getAmount() - property.getBaseCost());
         System.out.println("Bought");
         notifyAll();
     }
